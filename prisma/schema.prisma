@@ -11,3 +11,38 @@ generator client {
 datasource db {
   provider = "postgresql"
 }
+
+model User {
+  id        String   @id @default(cuid())
+  name      String
+  email     String   @unique
+  password  String
+  books     Book[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+model Book {
+  id        String   @id @default(cuid())
+  title     String
+  author    String
+  pages     Int?
+  status    BookStatus @default(quero_ler)
+  rating    Int?
+  userId    String
+  categories Category[]
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+enum BookStatus {
+  lido
+  lendo
+  quero_ler
+}
+model Category {
+  id    String @id @default(cuid())
+  name  String @unique
+  books Book[]
+}
+
+ 
