@@ -1,21 +1,15 @@
 import express from 'express'
+import { protect } from '../middlewares/authMiddleware'
+import { getAllBooks, getBookById, createBook, updateBook, deleteBook } from '../controllers/bookController'
+import { validate } from '../middlewares/validate'
+import { createBookSchema, updateBookSchema } from '../validators/book.validator'
 
- const router = express.Router()
+const router = express.Router()
 
+router.get('/', protect, getAllBooks)
+router.get('/:id', protect, getBookById)
+router.post('/', protect, validate(createBookSchema), createBook)
+router.put('/:id', protect, validate(updateBookSchema), updateBook)
+router.delete('/:id', protect, deleteBook)
 
- router.get("/",(req, res) => {
-    res.json({httpMethod:"get"})
- })
-  router.post("/",(req, res) => {
-    res.json({httpMethod:"post"})
- })
-  router.put("/",(req, res) => {
-    res.json({httpMethod:"put"})
- })
- router.delete("/ ",(req, res) => {
-    res.json({httpMethod:"delete"})
- })
-
-
-
- export default router
+export default router
